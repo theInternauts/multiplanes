@@ -6,17 +6,17 @@
 	</style>
 	<script src="js/three.min.js"></script>
 	<script>
-		window.onload = function(){
+		Multiplanes = function(selector_id){
+			var $element = document.getElementById(selector_id)
+
 			var scene = new THREE.Scene();
 			var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
 
 			var renderer = new THREE.WebGLRenderer({ antialias: true });
 			renderer.setSize(window.innerWidth, window.innerHeight);
-			document.body.appendChild(renderer.domElement);
+			$element.appendChild(renderer.domElement);
 
-			// var geometry = new THREE.CubeGeometry(1,1,1);
 			var geometry = new THREE.CylinderGeometry( 0, 10, 100, 3 );
-			// geometry.applyMatrix( new THREE.Matrix4().makeRotationFromEuler( new THREE.Vector3( Math.PI / 2, Math.PI, 0 ) ) );
 			var material = new THREE.MeshBasicMaterial();
 
 
@@ -36,9 +36,13 @@
 
 			render();
 		}
+
+		window.onload = function(){
+			game = new Multiplanes('game-container')
+		}
 	</script>
 </head>
-<body>
+<body id="game-container">
 	
 </body>
 </html>
