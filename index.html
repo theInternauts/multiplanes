@@ -8,7 +8,6 @@
 	<script>
 		Multiplanes = function(selector_id){
 			var $environment = { selector: selector_id};
-				$environment.DOM_element = document.getElementById($environment.selector)
 			var scene
 			var camera
 			var renderer
@@ -17,6 +16,8 @@
 			var airplane
 
 			function init(){
+				$environment.isRunning = true
+				$environment.DOM_element = document.getElementById($environment.selector)
 				if($environment.DOM_element == null){
 					$environment.DOM_element = window
 					$environment.height = window.innerHeight
@@ -28,6 +29,7 @@
 
 				$environment.aspect_ratio = $environment.width/$environment.height
 				build()
+				render() //could cause a race condition if this game gets too complex -- consider a callback from build()
 			}
 
 			function build(){
@@ -47,17 +49,33 @@
 				camera.position.z = 100;
 			}
 
+			function render() {
+				if($environment.isRunning){
+					requestAnimationFrame(render);
 
-			var render = function () {
-				requestAnimationFrame(render);
-				
-				airplane.rotation.y += 0.01;
+					airplane.rotation.y += 0.01;
 
-				renderer.render(scene, camera);
-			};
+					renderer.render(scene, camera);
+				}
+			}
+
+			function pause(){
+				$environment.isRunning = false
+			}
+
+			function unPause(){
+				if(!$environment.isRunning){
+					$environment.isRunning = true
+					render()
+				}
+			}
 
 			init();
-			render();
+
+			return {
+				pause: pause,
+				unPause: unPause
+			}
 		}
 
 		window.onload = function(){
