@@ -7,33 +7,56 @@
 	<script src="js/three.min.js"></script>
 	<script>
 		Multiplanes = function(selector_id){
-			var $element = document.getElementById(selector_id)
+			var $environment = { selector: selector_id};
+				$environment.DOM_element = document.getElementById($environment.selector)
+			var scene
+			var camera
+			var renderer
+			var geometry
+			var material
+			var airplane
 
-			var scene = new THREE.Scene();
-			var camera = new THREE.PerspectiveCamera(75, window.innerWidth/window.innerHeight, 0.1, 1000);
+			function init(){
+				if($environment.DOM_element == null){
+					$environment.DOM_element = window
+					$environment.height = window.innerHeight
+					$environment.width = window.innerWidth
+				} else {
+					$environment.height = $environment.DOM_element.clientHeight
+					$environment.width = $environment.DOM_element.clientWidth
+				}
 
-			var renderer = new THREE.WebGLRenderer({ antialias: true });
-			renderer.setSize(window.innerWidth, window.innerHeight);
-			$element.appendChild(renderer.domElement);
+				$environment.aspect_ratio = $environment.width/$environment.height
+				build()
+			}
 
-			var geometry = new THREE.CylinderGeometry( 0, 10, 100, 3 );
-			var material = new THREE.MeshBasicMaterial();
+			function build(){
+				scene = new THREE.Scene();
+				camera = new THREE.PerspectiveCamera(75, $environment.aspect_ratio, 0.1, 1000);
 
+				renderer = new THREE.WebGLRenderer({ antialias: true });
+				renderer.setSize($environment.width, $environment.height);
+				$environment.DOM_element.appendChild(renderer.domElement);
 
-			var cube = new THREE.Mesh(geometry, material);
-			scene.add(cube);
+				geometry = new THREE.CylinderGeometry( 0, 10, 100, 3 );
+				material = new THREE.MeshBasicMaterial();
 
-			camera.position.z = 100;
+				airplane = new THREE.Mesh(geometry, material);
+				scene.add(airplane);
+
+				camera.position.z = 100;
+			}
+
 
 			var render = function () {
 				requestAnimationFrame(render);
-
-				// cube.rotation.x += 0.1;
-				cube.rotation.y += 0.01;
+				
+				airplane.rotation.y += 0.01;
 
 				renderer.render(scene, camera);
 			};
 
+			init();
 			render();
 		}
 
