@@ -41,20 +41,21 @@
 				renderer.setSize($environment.width, $environment.height);
 				$environment.DOM_element.appendChild(renderer.domElement);
 
-				geometry = new THREE.CylinderGeometry( 0, 10, 100, 3 );
-				material = new THREE.MeshBasicMaterial();
+				// geometry = new THREE.CylinderGeometry( 0, 10, 100, 3 );
+				// material = new THREE.MeshBasicMaterial();
 
-				airplane = new THREE.Mesh(geometry, material);
-				scene.add(airplane);
+				// airplane = new THREE.Mesh(geometry, material);
+				airplane = new Airplane()
+				scene.add(airplane.mesh)
 
-				camera.position.z = 100;
+				camera.position.z = 100
 			}
 
 			function render() {
 				if($environment.isRunning){
 					requestAnimationFrame(render);
 
-					airplane.rotation.y += 0.01;
+					airplane.mesh.rotation.y += 0.01;
 
 					renderer.render(scene, camera);
 				}
